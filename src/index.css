@@ -12,6 +12,7 @@ body{
   font-family: "Noto Serif";
   color: var(--secondary);
   background-color: var(--turtary);
+  margin: 0px;
 }
 .App{
   max-width: 960px;

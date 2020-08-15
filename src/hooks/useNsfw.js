@@ -21,7 +21,7 @@ export default function useNsfw(imgElement) {
         }
         async function classifyImage(img) {
             setLoading(true)
-            // debugger
+            await sleep(100)
             const predictions = await model.classify(img)
             setLoading(false)
             setClasses(predictions)
@@ -32,4 +32,11 @@ export default function useNsfw(imgElement) {
     return {
         classes, loading
     }
+}
+
+function sleep(timeInMs = 0) {
+    let p = new Promise((resolve) => {
+        setTimeout(_ => resolve(), timeInMs)
+    })
+    return p;
 }

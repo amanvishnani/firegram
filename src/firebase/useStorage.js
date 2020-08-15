@@ -23,6 +23,7 @@ function useStorage() {
             }, async () => {
                 const url = await storageRef.getDownloadURL();
                 setUrl(url) 
+                setError("")
                 setLoading(false)
                 resolve(url)
             })

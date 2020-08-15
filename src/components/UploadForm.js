@@ -8,6 +8,13 @@ import useNsfw from "../hooks/useNsfw";
 import useImageDataUrl from '../hooks/useImageDataUrl';
 import useCollectionAdd from '../firebase/useCollectionAdd';
 
+let styles = {
+    previewImage: {
+        maxWidth: 250,
+        maxHeight: 250
+    }
+}
+
 export default function UploadForm() {
 
     const [selectedFile, setSelectedFile] = useState(null);
@@ -100,7 +107,7 @@ export default function UploadForm() {
 
     function renderUploadImage(dataUrl) {
         return <>
-            <img src={dataUrl} height={250} alt="Preview" /> <br/>
+            <img src={dataUrl} height={250} style={styles.previewImage} alt="Preview" /> <br/>
             <Button onClick={_ => uploadFile()} variant="contained" color="primary">
                 Upload
             </Button>

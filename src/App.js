@@ -1,14 +1,14 @@
 import React from 'react';
 import './App.css';
-import Title from "./components/Title";
 import UploadForm from './components/UploadForm';
 import PhotoGrid from './components/PhotoGrid';
+import NavBar from './components/NavBar';
 
 function App() {
   return (
     <div className="App">
-      <Title/>
-      <UploadForm/>
+      <NavBar/>
+      <UploadForm />
       <PhotoGrid />
     </div>
   );
