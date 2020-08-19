@@ -7,11 +7,15 @@ import AddIcon from '@material-ui/icons/Add';
 import useNsfw from "../hooks/useNsfw";
 import useImageDataUrl from '../hooks/useImageDataUrl';
 import useCollectionAdd from '../firebase/useCollectionAdd';
+import useAuth from "../firebase/auth/useAuth";
 
 let styles = {
     previewImage: {
         maxWidth: 250,
         maxHeight: 250
+    },
+    addNewFab: {
+        margin: 20
     }
 }
 
@@ -19,16 +23,18 @@ export default function UploadForm() {
 
     const [selectedFile, setSelectedFile] = useState(null);
     const [fileError, setFileError] = useState(null);
-    const { progress, error, loading, saveFile } = useStorage();
-    const { dataUrl, setFile: setImageFile } = useImageDataUrl();
     const [imageTag, setImageTag] = useState(null);
     const [imageSanity, setImageSanity] = useState({
         isValid: true,
         error: "",
         pristine: true
     });
+
+    const { progress, error, loading, saveFile } = useStorage();
+    const { dataUrl, setFile: setImageFile } = useImageDataUrl();
     const { classes } = useNsfw(imageTag)
-    let { save } = useCollectionAdd('media');
+    const { save } = useCollectionAdd('media');
+    const { auth } = useAuth();
 
     const allowedFiles = ['image/png', 'image/jpeg']
     const INVALID_FILE = "Please select an image (png/jpeg)";
@@ -40,7 +46,8 @@ export default function UploadForm() {
     async function uploadFile() {
         let createdAt = Date.now()
         let url = await saveFile(selectedFile, `${createdAt}`)
-        await save({ url, createdAt });
+        let { uid } = auth;
+        await save({ url, createdAt, uid });
         cleanUp();
     }
 
@@ -91,8 +98,9 @@ export default function UploadForm() {
         return <form>
             <label htmlFor="upload-input">
                 <input name="upload-input" id="upload-input" style={{ display: 'none' }} type="file" onChange={changeHandler} />
-                <Fab variant="extended" component="span" color="primary" aria-label="add">
+                <Fab variant="extended" component="span" color="primary" aria-label="add" style={styles.addNewFab}>
                     <AddIcon />
+                    Add New
                 </Fab>
             </label>
             <div className="output">
@@ -121,12 +129,12 @@ export default function UploadForm() {
     return (
         <>
             <div>
-                {loading && <LinearProgress variant="determinate" value={progress} />}
+                {loading && <LinearProgress color="secondary" variant="determinate" value={progress} />}
             </div>
             {
-                imageSanity.isValid && !imageSanity.pristine ?
+                auth && (imageSanity.isValid && !imageSanity.pristine ?
                     renderUploadImage(dataUrl) :
-                    renderForm()
+                    renderForm())
             }
         </>
     )

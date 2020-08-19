@@ -10,8 +10,9 @@ function useStorage() {
     function saveFile(file, fileName) {
         if(file === null) return;
         fileName = fileName || file.name;
+        let filePath = `media/${fileName}`
         let p = new Promise(function executor(resolve, reject) {
-            const storageRef = projectStorage.ref(fileName)
+            const storageRef = projectStorage.ref(filePath)
             setLoading(true)
             storageRef.put(file).on('state_changed', (snap) => {
                 let percentage = (snap.bytesTransferred / snap.totalBytes) * 100;
